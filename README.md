@@ -1,147 +1,65 @@
-         **  Swype\_implementation\_3**
+**Swipe\_implementation\_1**
 
- gesture \_data contain information of input file.
+ gesture \_data contain information of information of input file.
 
  gesture \_info is extracted from gesture\_data.
 
  expected \_word  is extracted from gesture\_data
 
- Touch\_point is also extracted from gesture\_data it contains information of the
+ Touch\_point is also extracted from gesture\_data it contain information of the
 
- trajectory.   Follow by user
+ trajectory.
 
- The whole problem runs around the proximity of character so we upload proximity\_file
+ Follow by user
 
-Proximity file contain information
+**Get\_suggestion** :-
 
-**&quot;locale&quot;** : **&quot;en\_US&quot;** ,
+ get \_suggestion take path as input and find closest character sequence.
 
-**&quot;keyboardMinWidth&quot;** : 1080,
+How does it do that..
 
-**&quot;keyboardHeight&quot;** : 667,
+Basically it traverse all the keyboard coordinate for single path coordinate and the nearest one counts. This process is done for every path coordinate.
 
-**&quot;gridWidth&quot;** : 32,
+Now we have a new have path coordinate now we have to find character sequence.
 
-**&quot;gridHeight&quot;** : 16,
+ We already mapped character vs coordinate we simply found the character sequence for new path.
 
-**&quot;mostCommonKeyWidth&quot;** : 108,
+Declare a vector which contain string (suggestion).
 
-**&quot;mostCommonKeyHeight&quot;** : 165,
+First this container contain all the word of dictionary which first and last character match with first and last character of character sequence respectively.
 
-**&quot;keyCount&quot;** : 29,
+             Now we have to do some elimination.
 
-**&quot;proximityCharsArray=[...]**
+We let those words in the container whose first and last character is same as character sequence as well as this word present as subsequence.
 
-  **What is proximity mean .**.
+Our container size reduces after this operation.
 
- The simple meaning of proximity is nearer adjacent char like for s:-[w, a, z, x, d, e]
+           Now final and last thing(last but not least)
 
-**.Get\_suggestion**
+ Let me start by  giving you an example qwedfgnm. When we swipe this word you can see that q, w, e are from first row. d, f, g are from second row and n, m from third row, we have to find a new sequence whose consecutive alphabets will not be the same.
 
-    **Proximity\_info**
+We define an integer type variable min\_length this will be equal to the above string length.
 
-   For getting information of proximity info \_parse\_proximity() function is called
+We let those words in the container whose size is greater than min\_length-3 and also follow above condition. And this find container will be output. This will contain the list of suggestion.
 
-   This function divide into proximitycharsarray into ...size(proximitycharsarray)/16 blocks.
+**Definition of the variable** \_\_
 
-   Every block is mapped to coordinate that mean whenever you need ...proximity of any character you just have to find a pair of numbers using ..proximity\_box\_coordinate
+KEY\_LYAOUT:-  contain information of keyboard .precisely which character in which row.
 
-  you Can find proximity character\_array then filter this proximity   ..character\_array
+WORDS:- contain all  Dictionary words.
 
- (Filter mean remove the negative number and change numerical values into    .charters)
+**Definition of functions\_\_**
 
-..For given path coordinate for every coordinate find proximity array
+\_get\_keyboard\_row(char chr): char is in which row
 
-  Path\_proximity\_character
+\_match(string path, string word): word is a subsequence of path
 
-  **for** p **in** path\_coordinates:
+\_compress(string sequence): ex-11123311=\&gt;1231
 
-  proximity\_box\_coordinate = self.\_get\_closest\_proximity\_box(p)
+\_get\_minimum\_word\_length(string compress\_str) :return compress\_str.size
 
-proximity\_characters = self.proximity\_info.get(proximity\_box\_coordinate, [])
+\_get\_closest\_char(pair\&lt;int,int\&gt; coordinate)nearest character to this chr
 
-proximity\_characters = filter( **lambda** x: x \&gt; ord( **&quot;a&quot;** ), proximity\_characters)
+\_get\_closest\_chars\_sequence(vector\&lt;pair\&lt;int,int\&gt;\&gt; path\_cordinate) return
 
-proximity\_characters = tuple(map( **lambda** x: chr(x), proximity\_characters))
-
-path\_proximity\_chars.append(proximity\_characters)
-
-:- chr() convert an integer into character
-
-:- ord() convert character into an integer
-
-:- \_get\_closest\_proximity\_box(){
-
-        **def** \_get\_closest\_proximity\_box(self, p):
-
-        proximity\_box\_width = self.keyboard\_display\_width // self.grid\_n\_cols
-
-        proximity\_box\_height = self.keyboard\_display\_height //self.grid\_n\_row
-
-    **return** Point(p.x // proximity\_box\_width, p.y // proximity\_box\_height)
-
-}
-
-**                                    TO FIND THE FINAL WORD**
-
-**     ** (Complexity will be high because of every possible combination)
-
-**def** \_get\_universal\_word\_set\_itertools(unique\_proximity\_chars):
-
-It does
-
-_#__\*_ _Now out of all the unique character pairs:_
-
-_# \* First we try to get all the possible pairs with length in range [2, n]_
-
-_# \*__Then we get the dense mesh network between formed pairs of various lengths._
-
-_universal\_possible\_words =_ _set__()_
-
-**for** _i_ **in** _xrange__(__2 __,_ _len__ (unique\_proximity\_chars) +_ _1__):_
-
-_   proximity\_chars\_list = itertools.combinations(unique\_proximity\_chars, i)_
-
-_   _ **for** _proximity\_char\_group_ **in** _proximity\_chars\_list:_
-
-_       probable\_words = itertools.product(\*proximity\_char\_group)_
-
-_       _ **for** _word\_chars_ **in** _probable\_words:_
-
-_           universal\_possible\_words.update(_ **&quot;&quot;** _.join(word\_chars))_
-
-**print** _len__(universal\_possible\_words)_
-
-_                       _ **COMBINATION**
-
-_combinations(iterable, r) --\&gt; combinations object_
-
-_Return successive r-length combinations of elements in the iterable._
-
-_combinations(range(4), 3) --\&gt; (0,1,2), (0,1,3), (0,2,3), (1,2,3)_
-
-_     _
-
-_                                 _ **PRODUCT**
-
-_product(\*iterables) --\&gt; product object_
-
-_Cartesian product of input iterables.  Equivalent to nested for-loops._
-
-_For example, product(A, B) returns the same as:  ((x,y) for x in A for y in B)._
-
-_The leftmost iterators are in the outermost for-loop, so the output tuples_
-
-_cycle in a manner similar to an odometer (with the rightmost element changing_
-
-_on every iteration)._
-
-_To compute the product of an iterable with itself, specify the number_
-
-_of repetitions with the optional repeat keyword argument. For example,_
-
-_product(A, repeat=4) means the same as product(A, A, A, A)._
-
-_product(&#39;ab&#39;, range(3)) --\&gt; (&#39;a&#39;,0) (&#39;a&#39;,1) (&#39;a&#39;,2) (&#39;b&#39;,0) (&#39;b&#39;,1) (&#39;b&#39;,2)_
-
-_product((0,1), (0,1), (0,1)) --\&gt; (0,0,0) (0,0,1) (0,1,0) (0,1,1) (1,0,0) ..._
+Nearest character to every coordinate of the vector.
