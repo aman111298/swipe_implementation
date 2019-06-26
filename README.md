@@ -1,4 +1,4 @@
-           # Swype\_implementation\_3
+           ** Swype\_implementation\_3 **
 
  gesture \_data contain information of input file.
 
